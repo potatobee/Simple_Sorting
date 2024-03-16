@@ -2,119 +2,211 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Fungsi untuk menghasilkan bilangan acak
-void generateRandomNumbers(int *arr, int n) {
-    srand(time(NULL)); // Inisialisasi seed acak
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % 1000000; // Menghasilkan bilangan acak antara 0 dan 999999
+#define MAX_SIZE 1000000
+
+void generateRandomNumbers(int array[], int size, int seed)
+{
+    srand(seed);
+    for (int i = 0; i < size; i++)
+    {
+        array[i] = rand();
     }
 }
 
-// Fungsi untuk melakukan bubble sort
-void bubbleSort(int *arr, int n) {
-    for (int i = 0; i < n-1; i++) {
-        for (int j = 0; j < n-i-1; j++) {
-            if (arr[j] > arr[j+1]) {
-                // Menukar arr[j] dan arr[j+1]
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
+// bubble sort
+void bubbleSort(int array[], int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (array[j] > array[j + 1])
+            {
+                int temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
             }
         }
     }
 }
 
-// Fungsi untuk melakukan selection sort
-void selectionSort(int *arr, int n) {
-    int minIndex;
-    for (int i = 0; i < n-1; i++) {
-        minIndex = i;
-        for (int j = i+1; j < n; j++) {
-            if (arr[j] < arr[minIndex]) {
-                minIndex = j;
+// selection sort
+void selectionSort(int array[], int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        int min_index = i;
+        for (int j = i + 1; j < size; j++)
+        {
+            if (array[j] < array[min_index])
+            {
+                min_index = j;
             }
         }
-        // Menukar arr[i] dan arr[minIndex]
-        int temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
+        int temp = array[min_index];
+        array[min_index] = array[i];
+        array[i] = temp;
     }
 }
 
-// Fungsi untuk melakukan insertion sort
-void insertionSort(int *arr, int n) {
-    int key, j;
-    for (int i = 1; i < n; i++) {
-        key = arr[i];
-        j = i - 1;
-
-        // Memindahkan elemen arr[0..i-1] yang lebih besar dari key ke posisi setelahnya
-        while (j >= 0 && arr[j] > key) {
-            arr[j+1] = arr[j];
-            j = j - 1;
+// insertion sort
+void insertionSort(int array[], int size)
+{
+    for (int i = 1; i < size; i++)
+    {
+        int key = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > key)
+        {
+            array[j + 1] = array[j];
+            j--;
         }
-        arr[j+1] = key;
+        array[j + 1] = key;
     }
 }
 
-// Fungsi untuk menulis bilangan terurut dan tidak terurut ke dalam file
-void writeToFile(int *arr, int n, char *filename) {
-    FILE *file = fopen(filename, "w");
-    if (file == NULL) {
-        printf("Error opening file.\n");
-        exit(1);
+void saveToFile(char *filename, int array[], int size, char *type, char *sort_type)
+{
+    FILE *file = fopen(filename, "a");
+    if (file == NULL)
+    {
+        printf("Failed to open file.\n");
+        return;
     }
-    for (int i = 0; i < n; i++) {
-        fprintf(file, "%d\n", arr[i]);
+
+    if (type == "unsorted")
+    {
+        fprintf(file, "Ukuran angka %d\n", size);
+        fprintf(file, "%s:\n", sort_type);
+        fprintf(file, "Angka Tidak Terurut : ");
     }
+    else if (type == "sorted")
+    {
+        fprintf(file, "Angka Terurut : ");
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        fprintf(file, "%d ", array[i]);
+    }
+    fprintf(file, "\n");
+
     fclose(file);
 }
 
-// Fungsi untuk mencetak tabel hasil eksekusi
-void printExecutionTimeTable() {
-    int n = 1000000; // Jumlah maksimum bilangan integer
-    int step = 100000; // Ukuran langkah penambahan jumlah bilangan
-    clock_t start, end;
-    double time_taken;
+int main()
+{
+    int numbers[MAX_SIZE];
+    int size = 100000;
+    int seed = time(NULL); 
 
-    printf("Jenis Algoritma\tJumlah Bilangan\tWaktu Eksekusi (ms)\n");
+    // membuat angka acak sekali di awal
+    generateRandomNumbers(numbers, MAX_SIZE, seed);
 
-    for (int i = step; i <= n; i += step) {
-        int *arr = (int *)malloc(i * sizeof(int));
-        generateRandomNumbers(arr, i);
+    printf("----------------------------------------------------------------------------------\n");
+    printf("||Jenis Algoritma\t|| Jumlah Bilangan\t|| Waktu Eksekusi (ms)\t\t||\n");
+    printf("----------------------------------------------------------------------------------\n");
 
-        // Bubble Sort
+    for (int i = 0; i < 10; i++) // 10 iterasi untuk menguji dari 100,000 hingga 1,000,000 dengan penambahan 100,000 setiap iterasi
+    {
+        clock_t start, end;
+        double cpu_time_used;
+
+        // pengujian untuk bubble sort
         start = clock();
-        bubbleSort(arr, i);
+        bubbleSort(numbers, size);
         end = clock();
-        time_taken = ((double)(end - start)) * 1000 / CLOCKS_PER_SEC;
-        printf("Bubble Sort\t%dk\t\t%.2f\n", i/1000, time_taken);
+        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
 
-        writeToFile(arr, i, "bubble_sorted.txt");
+        if (size == 100000)
+        {
+            printf("||Bubble Sort\t\t|| %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
+        else if (size == 1000000)
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("----------------------------------------------------------------------------------\n");
+        }
+        else
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
 
-        // Selection Sort
-        start = clock();
-        selectionSort(arr, i);
-        end = clock();
-        time_taken = ((double)(end - start)) * 1000 / CLOCKS_PER_SEC;
-        printf("Selection Sort\t%dk\t\t%.2f\n", i/1000, time_taken);
+        saveToFile("numbers.txt", numbers, size, "unsorted", "Bubble Sort");
+        saveToFile("numbers.txt", numbers, size, "sorted", "Bubble Sort");
 
-        writeToFile(arr, i, "selection_sorted.txt");
-
-        // Insertion Sort
-        start = clock();
-        insertionSort(arr, i);
-        end = clock();
-        time_taken = ((double)(end - start)) * 1000 / CLOCKS_PER_SEC;
-        printf("Insertion Sort\t%dk\t\t%.2f\n", i/1000, time_taken);
-
-        writeToFile(arr, i, "insertion_sorted.txt");
-
-        free(arr);
+        size += 100000; // Meningkatkan ukuran array untuk iterasi selanjutnya
     }
-}
 
-int main() {
-    printExecutionTimeTable();
+    // mengatur ulang ukuran array ke nilai awal
+    size = 100000;
+    for (int i = 0; i < 10; i++)
+    {
+        clock_t start, end;
+        double cpu_time_used;
+
+        // pengujian untuk selection sort
+        start = clock();
+        selectionSort(numbers, size);
+        end = clock();
+        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
+        if (size == 100000)
+        {
+            printf("||Selection Sort        || %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
+        else if (size == 1000000)
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("----------------------------------------------------------------------------------\n");
+        }
+
+        else
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
+
+        saveToFile("numbers.txt", numbers, size, "unsorted", "Selection Sort");
+        saveToFile("numbers.txt", numbers, size, "sorted", "Selection Sort");
+
+        size += 100000;
+    }
+
+    // mengatur ulang ukuran array ke nilai awal
+    size = 100000;
+    for (int i = 0; i < 10; i++)
+    {
+        clock_t start, end;
+        double cpu_time_used;
+
+        // pengujian untuk insertion sort
+        start = clock();
+        insertionSort(numbers, size);
+        end = clock();
+        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
+        if (size == 100000)
+        {
+            printf("||Insertion Sort        || %d\t\t|| %.2f\t\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
+        else if (size == 1000000)
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t\t||\n", size, cpu_time_used);
+            printf("----------------------------------------------------------------------------------\n");
+        }
+        else
+        {
+            printf("||                      || %d\t\t|| %.2f\t\t\t\t||\n", size, cpu_time_used);
+            printf("||                      ----------------------------------------------------------\n");
+        }
+
+        saveToFile("numbers.txt", numbers, size, "unsorted", "Insertion Sort");
+        saveToFile("numbers.txt", numbers, size, "sorted", "Insertion Sort");
+
+        size += 100000;
+    }
     return 0;
 }
