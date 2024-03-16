@@ -6,37 +6,37 @@
 Repositori ini berisi kode program sederhana dalam bahasa pemrograman C untuk melakukan pengurutan (sorting) menggunakan tiga algoritma berbeda: bubble sort, selection sort, dan insertion sort.
 
 ## Cara Menjalankan Kode Program
-Untuk menjalankan kode program pada sistem macOS, Berikut adalah cara menjalankan kode program di macOS:
 
-1. Pastikan Compiler C Terinstal: Pastikan Anda memiliki kompiler C yang terinstal di macOS Anda. Secara default, macOS biasanya dilengkapi dengan kompiler Clang. Anda dapat memverifikasi apakah Clang sudah terinstal dengan membuka Terminal dan menjalankan perintah `clang --version`.
+How to run the Park Ticketing Management System Project (PTMS)
+1. Download the zip file
 
-2. Buka Terminal: Buka Terminal di macOS. Anda dapat menemukan Terminal di folder "Utilities" di dalam folder "Applications".
+2. Extract the file and copy ptms folder
 
-3. Arahkan ke Direktori Kode Program: Gunakan perintah `cd` untuk berpindah ke direktori yang berisi kode program Anda. Misalnya, jika kode program Anda disimpan di folder "Documents", Anda dapat menggunakan perintah berikut di Terminal:
-   ```
-   cd Documents
-   ```
+3.Paste inside root directory(for xampp xampp/htdocs, for wamp wamp/www, for lamp var/www/html)
 
-4. Compile Kode Program: Setelah berada di direktori yang sesuai, Anda dapat menggunakan kompiler C untuk mengompilasi kode program. Misalnya, jika nama file program Anda adalah `2208107010051_Simple_Sorting.c`, Anda dapat menggunakan perintah berikut untuk mengompilasi:
-   ```
-   clang 2208107010051_Simple_Sorting.c -o 2208107010051_Simple_Sorting
-   ```
-   Ini akan menghasilkan file eksekusi dengan nama `2208107010051_Simple_Sorting` di direktori yang sama.
+4. Open PHPMyAdmin (http://localhost/phpmyadmin)
 
-5. Jalankan Kode Program: Setelah berhasil dikompilasi, Anda dapat menjalankan file eksekusi dengan mengetikkan nama filenya di Terminal dan menekan Enter. Misalnya:
-   ```
-   ./2208107010051_Simple_Sorting
-   ```
+5. Create a database with name ptmsdb
 
+6. Import ptmsdb.sql file(given inside the zip package in SQL file folder)
 
-Berikut adalah deskripsi singkat tentang fungsi-fungsi yang digunakan dalam kode program `2208107010051_Simple_Sorting.c`, yang dapat Anda tambahkan ke dalam README.md:
+7.Run the script http://localhost/ptmms
 
-1. `generateRandomNumbers(int *arr, int n)`: Fungsi ini digunakan untuk menghasilkan bilangan acak dalam array dengan panjang `n`. Fungsi ini menerima dua parameter, yaitu array `arr` yang akan diisi dengan bilangan acak, dan `n` yang merupakan panjang array tersebut.
+Admin Credential
 
-2. `bubbleSort(int *arr, int n)`: Fungsi ini melakukan pengurutan array menggunakan algoritma bubble sort. Fungsi ini menerima dua parameter, yaitu array `arr` yang akan diurutkan, dan `n` yang merupakan panjang array tersebut.
+Username: admin
+Password: Test@123
 
-3. `selectionSort(int *arr, int n)`: Fungsi ini melakukan pengurutan array menggunakan algoritma selection sort. Fungsi ini menerima dua parameter, yaitu array `arr` yang akan diurutkan, dan `n` yang merupakan panjang array tersebut.
+Fungsi-fungsi yang digunakan dalam kode program `2208107010051_Simple_Sorting.c`:
 
-4. `insertionSort(int *arr, int n)`: Fungsi ini melakukan pengurutan array menggunakan algoritma insertion sort. Fungsi ini menerima dua parameter, yaitu array `arr` yang akan diurutkan, dan `n` yang merupakan panjang array tersebut.
+1. `generateRandomNumbers(int array[], int size, int seed)`: Fungsi ini digunakan untuk mengisi array dengan bilangan acak menggunakan fungsi `rand()`. Fungsi ini memiliki tiga parameter: array yang akan diisi, ukuran array, dan seed untuk fungsi `srand()`.
 
-5. `writeToFile(int *arr, int n, char *filename)`: Fungsi ini digunakan untuk menulis array ke dalam file dengan nama yang ditentukan. Fungsi ini menerima tiga parameter, yaitu array `arr` yang akan ditulis ke dalam file, `n` yang merupakan panjang array tersebut, dan `filename` yang merupakan nama file tujuan.
+2. `bubbleSort(int array[], int size)`: Fungsi ini mengurutkan array menggunakan algoritma Bubble Sort. Fungsi ini memiliki dua parameter: array yang akan diurutkan dan ukuran array.
+
+3. `selectionSort(int array[], int size)`: Fungsi ini mengurutkan array menggunakan algoritma Selection Sort. Fungsi ini memiliki dua parameter: array yang akan diurutkan dan ukuran array.
+
+4. `insertionSort(int array[], int size)`: Fungsi ini mengurutkan array menggunakan algoritma Insertion Sort. Fungsi ini memiliki dua parameter: array yang akan diurutkan dan ukuran array.
+
+5. `saveToFile(char *filename, int array[], int size, char *type, char *sort_type)`: Fungsi ini menyimpan array ke dalam file teks. Fungsi ini memiliki lima parameter: nama file tujuan, array yang akan disimpan, ukuran array, jenis array ("unsorted" untuk array sebelum diurutkan, "sorted" untuk array setelah diurutkan), dan jenis pengurutan yang digunakan.
+
+6. `main()`: Fungsi utama dari program yang mengatur proses pengujian performa algoritma sorting, mencetak output informasi waktu eksekusi, dan menyimpan hasil evaluasi ke dalam file teks.
